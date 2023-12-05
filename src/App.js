@@ -1,12 +1,8 @@
-import { Login } from './components/login';
+import Login from "./components/login";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <Login />
-      </header>
-    </div>
+    <Login />
   );
 }
 
