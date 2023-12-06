@@ -1,6 +1,8 @@
 import React from 'react';
 import Header from '../header/index.jsx';
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { Paper, Table, TableBody, TableContainer, TableHead, TableRow } from '@mui/material';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 
 function createData(codigo, disciplina, prof, periodo, freq, horario) {
   return { codigo, disciplina, prof, periodo, freq, horario };
@@ -19,17 +21,21 @@ function TelaAluno() {
     <div>
       <Header />
       <div style={{padding: '8px 50px 0px' }}>
+        <div>
+          <h2>Boas Vindas</h2>
+          <h1>Aluno(a): José Elias</h1>
+        </div>
         <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
-            <TableRow>
-              <TableCell>Código</TableCell>
-              <TableCell align="right">Disciplina</TableCell>
-              <TableCell align="right">Professor</TableCell>
-              <TableCell align="right">Período</TableCell>
-              <TableCell align="right">Frequência</TableCell>
-              <TableCell align="right">Horário</TableCell>
-            </TableRow>
+            <StyledTableRow>
+              <StyledTableCell>Código</StyledTableCell>
+              <StyledTableCell align="right">Disciplina</StyledTableCell>
+              <StyledTableCell align="right">Professor</StyledTableCell>
+              <StyledTableCell align="right">Período</StyledTableCell>
+              <StyledTableCell align="right">Frequência</StyledTableCell>
+              <StyledTableCell align="right">Horário</StyledTableCell>
+            </StyledTableRow>
           </TableHead>
           <TableBody>
             {rows.map((row) => (
@@ -37,14 +43,14 @@ function TelaAluno() {
                 key={row.codigo}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
-                <TableCell component="th" scope="row">
+                <StyledTableCell component="th" scope="row">
                   {row.codigo}
-                </TableCell>
-                <TableCell align="right">{row.disciplina}</TableCell>
-                <TableCell align="right">{row.prof}</TableCell>
-                <TableCell align="right">{row.periodo}</TableCell>
-                <TableCell align="right">{row.freq}</TableCell>
-                <TableCell align="right">{row.horario}</TableCell>
+                </StyledTableCell>
+                <StyledTableCell align="right">{row.disciplina}</StyledTableCell>
+                <StyledTableCell align="right">{row.prof}</StyledTableCell>
+                <StyledTableCell align="right">{row.periodo}</StyledTableCell>
+                <StyledTableCell align="right">{row.freq}</StyledTableCell>
+                <StyledTableCell align="right">{row.horario}</StyledTableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -54,5 +60,25 @@ function TelaAluno() {
     </div>
   )
 };
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: "#1976d2",
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  '&:last-child td, &:last-child th': {
+    border: 0,
+  },
+}));
 
 export default TelaAluno;
