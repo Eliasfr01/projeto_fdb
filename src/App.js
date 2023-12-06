@@ -1,8 +1,8 @@
-import TelaAluno from "./components/telaAluno/telaAluno";
+import TelaProfessor from "./components/TelaProfessor/TelaProfessor";
 
 function App() {
   return (
-    <TelaAluno />
+    <TelaProfessor />
   );
 }
 
