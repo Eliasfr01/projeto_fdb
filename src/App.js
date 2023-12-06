@@ -1,8 +1,8 @@
-import Login from "./components/login";
+import TelaAluno from "./components/telaAluno/telaAluno";
 
 function App() {
   return (
-    <Login />
+    <TelaAluno />
   );
 }
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, TextField, Button, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import './styles.css';
-import LogoUFC from '../assets/LogoUFC.png';
+import LogoUFC from '../../assets/LogoUFC.png';
 
 function Login() {
   return (
