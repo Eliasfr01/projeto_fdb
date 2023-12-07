@@ -9,6 +9,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useState } from 'react';
 import AdicionarTurma from './AdicionarTurma.jsx';
 import AdicionarAlunos from './AdicionarAluno.jsx';
+import AdicionarProfessor from './AdicionarProfessor.jsx';
 // Dados simulados das turmas
 const turmasData = [
   { id: 1, codigo: 'QXD001', nome: 'Fundamentos de Programação', professor: 'Dr. Smith', semestre: '5° semestre', max_discente: '50', creditos: '24'},
@@ -20,6 +21,7 @@ function AdminTurmas() {
   // Funções para manipular eventos
   const [isAddTurmaOpen, setIsAddTurmaOpen] = useState(false);
   const [isAddAlunoOpen, setIsAddAlunoOpen] = useState(false);
+  const [isAddProfessorOpen, setIsAddProfessorOpen] = useState(false);
 
   const handleAdd = () => {
     console.log('Adicionar turma');
@@ -40,6 +42,14 @@ function AdminTurmas() {
 
   const handleCloseAddAluno = () => {
     setIsAddAlunoOpen(false);
+  };
+
+  const handleOpenAddProfessor = () => {
+    setIsAddProfessorOpen(true);
+  };
+
+  const handleCloseAddProfessor = () => {
+    setIsAddProfessorOpen(false);
   };
 
   const handleEdit = (turmaId) => {
@@ -98,6 +108,21 @@ function AdminTurmas() {
           onAddAluno={handleAddAluno}
         />
       
+      <Button 
+        startIcon={<AddCircleOutlineIcon />}
+        variant="contained" 
+        color="primary" 
+        onClick={handleOpenAddProfessor}
+        style={{marginLeft: '8px'}}
+        >
+        Adicionar Professor
+      </Button>
+
+      <AdicionarProfessor
+        open={isAddProfessorOpen}
+        onClose={handleCloseAddProfessor}
+      />
+
       <TableContainer component={Paper} style={{ marginTop: 16 }}>
         <Table>
           <TableHead>
