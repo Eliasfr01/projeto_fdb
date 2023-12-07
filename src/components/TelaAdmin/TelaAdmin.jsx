@@ -8,13 +8,17 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useState } from 'react';
 import AdicionarTurma from './AdicionarTurma.jsx';
-
+import AdicionarAlunos from './AdicionarAluno.jsx';
+import AdicionarProfessor from './AdicionarProfessor.jsx';
 // Dados simulados das turmas
 
 function AdminTurmas() {
   // Funções para manipular eventos
   const [turmas, setTurmas] = useState([]);
   const [isAddTurmaOpen, setIsAddTurmaOpen] = useState(false);
+
+  const [isAddAlunoOpen, setIsAddAlunoOpen] = useState(false);
+  const [isAddProfessorOpen, setIsAddProfessorOpen] = useState(false);
 
   const handleAdd = () => {
     console.log('Adicionar turma');
@@ -27,6 +31,22 @@ function AdminTurmas() {
 
   const handleCloseAddTurma = () => {
     setIsAddTurmaOpen(false);
+  };
+
+  const handleOpenAddAluno = () => {
+    setIsAddAlunoOpen(true);
+  };
+
+  const handleCloseAddAluno = () => {
+    setIsAddAlunoOpen(false);
+  };
+
+  const handleOpenAddProfessor = () => {
+    setIsAddProfessorOpen(true);
+  };
+
+  const handleCloseAddProfessor = () => {
+    setIsAddProfessorOpen(false);
   };
 
   const handleEdit = (turmaId) => {
@@ -62,6 +82,11 @@ function AdminTurmas() {
     fetchTurmas();
   }, []);
 
+  const handleAddAluno = (newAluno) => {
+    console.log(newAluno);
+    // Aqui você pode adicionar a lógica para enviar a nova turma para o backend
+  };
+
   return (
     <div>
     <Header/>
@@ -71,16 +96,48 @@ function AdminTurmas() {
         variant="contained"
         color="primary"
         onClick={handleOpenAddTurma}
+        
       >
         Adicionar Turma
       </Button>
-    
+
+      <Button
+        startIcon={<AddCircleOutlineIcon />}
+        variant="contained"
+        color="primary"
+        onClick={handleOpenAddAluno}
+        style={{marginLeft: '8px'}}
+
+      >
+        Adicionar Alunos
+      </Button>
         <AdicionarTurma
             open={isAddTurmaOpen}
             onClose={handleCloseAddTurma}
             onAddTurma={handleAddTurma}
         />
+
+        <AdicionarAlunos
+          open={isAddAlunoOpen}
+          onClose={handleCloseAddAluno}
+          onAddAluno={handleAddAluno}
+        />
       
+      <Button 
+        startIcon={<AddCircleOutlineIcon />}
+        variant="contained" 
+        color="primary" 
+        onClick={handleOpenAddProfessor}
+        style={{marginLeft: '8px'}}
+        >
+        Adicionar Professor
+      </Button>
+
+      <AdicionarProfessor
+        open={isAddProfessorOpen}
+        onClose={handleCloseAddProfessor}
+      />
+
       <TableContainer component={Paper} style={{ marginTop: 16 }}>
         <Table>
           <TableHead>
