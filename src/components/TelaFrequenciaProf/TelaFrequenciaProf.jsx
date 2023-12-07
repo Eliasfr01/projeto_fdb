@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from '../header/index.jsx';
-import { Paper, Table, TableBody, TableContainer, TableHead, TableRow, Button, Typography, IconButton } from '@mui/material';
+import { Paper, Table, TableBody, TableContainer, TableHead, TableRow, Button, IconButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -55,8 +55,12 @@ function FrenquenciaTurma() {
                   <StyledTableCell align="center">{row.matricula}</StyledTableCell>
                   <StyledTableCell align="center">{row.nome}</StyledTableCell>
                   <StyledTableCell align="center">
-                    <CheckCircleIcon color="success" />
-                    <CancelIcon color="error" />
+                    <IconButton>
+                      <CheckCircleIcon color="success" />
+                    </IconButton>
+                    <IconButton>
+                      <CancelIcon color="error" />
+                    </IconButton>
                   </StyledTableCell>
                 </StyledTableRow>
               ))}
