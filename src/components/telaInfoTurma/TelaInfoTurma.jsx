@@ -5,6 +5,10 @@ import { styled } from '@mui/material/styles';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
+import { useParams } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
+import './Style.css';
+
 function createData(matricula, nome, curso, email) {
   return { matricula, nome, curso, email };
 }
@@ -16,6 +20,7 @@ const rows = [
 ];
 
 function TelaInfoTurma() {
+  const {turmaId} = useParams();
   return(
     <div>
       <Header />
@@ -70,7 +75,10 @@ function TelaInfoTurma() {
         </Table>
         </TableContainer>
       </div>
-      <StyledButton variant='contained' color='primary'>Minhas Notas</StyledButton>
+      <StyledButton variant='contained' color='primary' component={RouterLink} to={`/aluno/info-turma/${turmaId}/minhasnotas`}>Minhas Notas</StyledButton>
+      <StyledButton variant='contained' color='primary' style={{ marginLeft: '8px' }} component={RouterLink} to={`/aluno`}>
+        Voltar
+      </StyledButton> 
     </div>
   )
 };
