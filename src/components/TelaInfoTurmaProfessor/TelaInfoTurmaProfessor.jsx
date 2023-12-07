@@ -1,6 +1,8 @@
 import React from 'react';
 import Header from '../header/index.jsx';
-import { Button, Paper, Table, TableBody, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material';
+import { Button, Paper, Table, TableBody, TableContainer, TableHead, TableRow, TextField} from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -16,6 +18,7 @@ const rows = [
 ];
 
 function TelaInfoTurma() {
+  const { turmaId } = useParams();
   return(
     <div>
       <Header />
@@ -23,9 +26,10 @@ function TelaInfoTurma() {
         @import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap');
       </style>
       <div style={{padding: '8px 50px 0px' }}>
+        
         <div>
           <h2>Fundamento de Banco de Dados</h2>
-          <h1>Discente: Elias</h1>
+          <h1>Docente: Livia Almada</h1>
         </div>
         <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -69,8 +73,12 @@ function TelaInfoTurma() {
         </Table>
         </TableContainer>
       </div>
-      <StyledButton variant='contained' color='primary'>Notas</StyledButton>
-      <StyledButton variant='contained' color='primary'>Frequência</StyledButton>
+      <StyledButton variant='contained' color='primary' component={RouterLink} to={`/professor/info-turma/${turmaId}/notas`}>
+        Notas
+      </StyledButton>
+      <StyledButton variant='contained' color='primary' component={RouterLink} to={`/professor/info-turma/${turmaId}/telafrequencia`}>
+        Frequência
+      </StyledButton>
     </div>
   )
 };
@@ -78,6 +86,10 @@ function TelaInfoTurma() {
 const StyledButton = styled(Button)(({ theme }) => ({
   marginTop: '20px',
   marginLeft: '50px',
+  color: '#ffffff',
+  textDecoration: 'none',
+  textDecorationColor: '#ffffff',
+  textTransform: 'none',
 }))
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({

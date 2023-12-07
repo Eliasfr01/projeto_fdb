@@ -1,8 +1,10 @@
 import React from 'react';
 import Header from '../header/index.jsx';
-import { Paper, Table, TableBody, TableContainer, TableHead, TableRow, Button, Typography } from '@mui/material';
+import { Paper, Table, TableBody, TableContainer, TableHead, TableRow, Button} from '@mui/material';
 import { styled } from '@mui/material/styles';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import { useParams } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import './Style.css';
 function createData(matricula, nome, ap1, ap2, media) {
   return {matricula, nome, ap1, ap2, media};
@@ -15,6 +17,7 @@ const rows = [
 ];
 
 function TelaProfessor() {
+  const {turmaId} = useParams();
   return(
     <div>
       <Header />
@@ -54,7 +57,9 @@ function TelaProfessor() {
           </TableBody>
         </Table>
         </TableContainer>
-        <StyledButton variant='contained' color='primary'>Voltar</StyledButton>
+        <StyledButton variant='contained' color='primary' component={RouterLink} to={`/professor/info-turma/${turmaId}`}>
+          Voltar
+        </StyledButton>
 
       </div>
     </div>

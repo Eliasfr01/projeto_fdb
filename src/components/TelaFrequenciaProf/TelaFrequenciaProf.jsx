@@ -7,6 +7,8 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
+import { useParams } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import './Style.css';
 
 function createData(matricula, nome, presente) {
@@ -19,7 +21,8 @@ const rows = [
   createData('537710', 'José Elias Farias Rocha Pinto', false),
 ];
 
-function TelaProfessor() {
+function FrenquenciaTurma() {
+  const {turmaId} = useParams();
   return(
     <div>
       <Header />
@@ -60,8 +63,12 @@ function TelaProfessor() {
             </TableBody>
           </Table>
         </TableContainer>
-        <StyledButton variant='contained' color='primary'>Concluir</StyledButton>
-        <StyledButton variant='contained' color='primary' style={{ marginLeft: '8px' }}>Voltar</StyledButton>
+        <StyledButton variant='contained' color='primary' style={{ marginLeft: '8px' }} component={RouterLink} to={`/professor/info-turma/${turmaId}`}>
+          Concluir
+        </StyledButton>
+        <StyledButton variant='contained' color='primary' style={{ marginLeft: '8px' }} component={RouterLink} to={`/professor/info-turma/${turmaId}`}>
+          Voltar
+        </StyledButton>
       </div>
     </div>
   )
@@ -90,4 +97,4 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-export default TelaProfessor;
+export default FrenquenciaTurma;

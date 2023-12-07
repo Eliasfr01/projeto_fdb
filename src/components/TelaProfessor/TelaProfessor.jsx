@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from '../header/index.jsx';
-import { Paper, Table, TableBody, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Paper, Table, TableBody, TableContainer, TableHead, TableRow, Link } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import './Style.css';
@@ -47,7 +48,9 @@ function TelaProfessor() {
                 <StyledTableCell component="th" scope="row">
                   {row.codigo}
                 </StyledTableCell>
-                <StyledTableCell align="center">{row.disciplina}</StyledTableCell>
+                <StyledTableCell align="center" >
+                  <Link component={RouterLink} to={`/professor/info-turma/${row.codigo}`}>{row.disciplina}</Link>
+                </StyledTableCell>
                 <StyledTableCell align="center">{row.periodo}</StyledTableCell>
                 <StyledTableCell align="center">{row.horario}</StyledTableCell>
               </StyledTableRow>
