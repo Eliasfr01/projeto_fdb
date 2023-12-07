@@ -1,8 +1,10 @@
 import React from 'react';
 import Header from '../header/index.jsx';
 import { styled } from '@mui/material/styles';
-import { Paper, Table, TableBody, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Paper, Table, TableBody, TableContainer, TableHead, TableRow, Button } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import { useParams } from 'react-router-dom';
 
 function createData(codigo, disciplina, prof, periodo, freq, horario) {
   return { codigo, disciplina, prof, periodo, freq, horario };
@@ -20,6 +22,7 @@ function TelaAluno() {
 
   const alunoNome = localStorage.getItem('alunoNome');
 
+  const {turmaId} = useParams();
   return(
     <div>
       <Header />
@@ -49,7 +52,9 @@ function TelaAluno() {
                 <StyledTableCell component="th" scope="row">
                   {row.codigo}
                 </StyledTableCell>
-                <StyledTableCell align="right">{row.disciplina}</StyledTableCell>
+                <StyledTableCell align="right"  component={RouterLink} to={`/aluno/info-turma/${row.codigo}`}>
+                  {row.disciplina}
+                </StyledTableCell>
                 <StyledTableCell align="right">{row.prof}</StyledTableCell>
                 <StyledTableCell align="right">{row.periodo}</StyledTableCell>
                 <StyledTableCell align="right">{row.freq}</StyledTableCell>
