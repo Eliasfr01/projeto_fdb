@@ -43,6 +43,9 @@ function Login() {
           navigate('/aluno');
         } else if (data.user.tipo_usuario === 'prof') {
           navigate('/professor');
+          localStorage.setItem('professorNome', data.user.nome);
+        } else if (data.user.tipo_usuario === 'adm') {
+          navigate('/admin');
         }
       } else {
         console.error('Erro ao realizar login', data.error);
@@ -67,7 +70,7 @@ function Login() {
           variant="outlined"
           value={username}
           onChange={(event) => setUserName(event.target.value)}
-          fullWidth
+
         />
         <TextField
           label="Senha"
@@ -75,8 +78,6 @@ function Login() {
           variant="outlined"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
-          fullWidth
-          margin='normal'
           InputProps={{ // Início da adição
             endAdornment: (
               <InputAdornment position="end">
@@ -91,7 +92,7 @@ function Login() {
             )
           }}
         />
-        <FormControl fullWidth margin="normal">
+        <FormControl margin="normal">
           <InputLabel id="user-type-label">Tipo de usuário</InputLabel>
           <Select
             labelId="user-type-label"
@@ -100,6 +101,7 @@ function Login() {
             label="Tipo de usuário"
             onChange={(event) => setUserType(event.target.value)}
           >
+            <MenuItem value="adm">Administrador</MenuItem>
             <MenuItem value="alu">Aluno</MenuItem>
             <MenuItem value="prof">Professor</MenuItem>
           </Select>

@@ -21,8 +21,8 @@ const rows = [
 function TelaAluno() {
 
   const alunoNome = localStorage.getItem('alunoNome');
-
   const {turmaId} = useParams();
+  
   return(
     <div>
       <Header />

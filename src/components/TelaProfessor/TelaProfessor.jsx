@@ -18,6 +18,9 @@ const rows = [
 ];
 
 function TelaProfessor() {
+
+  const professorNome = localStorage.getItem('professorNome');
+
   return(
     <div>
       <Header />
@@ -27,7 +30,7 @@ function TelaProfessor() {
       <div style={{padding: '8px 50px 0px' }}>
         <div>
           <h2>Boas Vindas</h2>
-          <h1>Prof.(a): Livia Almada</h1>
+          <h1>Prof.(a): {professorNome}</h1>
         </div>
         <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
