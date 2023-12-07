@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Header from '../header/index.jsx';
 import { Paper, Table, TableBody, TableContainer, TableHead, TableRow, Button, IconButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -10,15 +10,12 @@ import { useState } from 'react';
 import AdicionarTurma from './AdicionarTurma.jsx';
 
 // Dados simulados das turmas
-const turmasData = [
-  { id: 1, codigo: 'QXD001', nome: 'Fundamentos de Programação', professor: 'Dr. Smith', semestre: '5° semestre', max_discente: '50', creditos: '24'},
-  { id: 2, codigo: 'QXD002', nome: 'Estruturas de Dados', professor: 'Dr. Johnson', semestre: '5° semestre', max_discente: '50', creditos: '24'},
-  // ... outras turmas
-];
 
 function AdminTurmas() {
   // Funções para manipular eventos
+  const [turmas, setTurmas] = useState([]);
   const [isAddTurmaOpen, setIsAddTurmaOpen] = useState(false);
+
   const handleAdd = () => {
     console.log('Adicionar turma');
     // Implemente a lógica de adicionar turma aqui
@@ -46,6 +43,24 @@ function AdminTurmas() {
     console.log(newTurma);
     // Aqui você pode adicionar a lógica para enviar a nova turma para o backend
   };
+
+  useEffect(() => {
+    const fetchTurmas = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/turmas'); // Use o endereço da sua API
+        if (response.ok) {
+          const data = await response.json();
+          setTurmas(data);
+        } else {
+          console.error('Falha ao buscar turmas.');
+        }
+      } catch (error) {
+        console.error('Erro ao conectar com o servidor:', error);
+      }
+    };
+
+    fetchTurmas();
+  }, []);
 
   return (
     <div>
@@ -80,13 +95,13 @@ function AdminTurmas() {
             </StyledTableRow>
           </TableHead>
           <TableBody>
-            {turmasData.map((turma) => (
+            {turmas.map((turma) => (
               <StyledTableRow key={turma.id}>
-                <StyledTableCell>{turma.codigo}</StyledTableCell>
-                <StyledTableCell>{turma.nome}</StyledTableCell>
-                <StyledTableCell>{turma.professor}</StyledTableCell>
-                <StyledTableCell>{turma.semestre}</StyledTableCell>
-                <StyledTableCell>{turma.max_discente}</StyledTableCell>
+                <StyledTableCell>{turma.id_cadeira}</StyledTableCell>
+                <StyledTableCell>{turma.nome_cadeira}</StyledTableCell>
+                <StyledTableCell>{turma.nome_professor}</StyledTableCell>
+                <StyledTableCell>{turma.semestre_pertence}</StyledTableCell>
+                <StyledTableCell>{turma.max_discentes}</StyledTableCell>
                 <StyledTableCell>{turma.creditos}</StyledTableCell>
                 <StyledTableCell align="center">
                   <IconButton onClick={() => handleEdit(turma.id)} color="primary">
