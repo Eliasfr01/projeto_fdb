@@ -10,7 +10,7 @@ function AdicionarAlunos({ open, onClose }) {
   // Dados simulados dos alunos
   const alunosData = [
     { nome: 'Carlos Henrique', curso: 'Ciência da Computação', matricula: 531231 },
-    { nome: 'Pedro Maciel', curso: 'Ciência da Computação', matricula: 531232 },
+    { nome: 'Pedro Maciel', curso: 'Sistema da Informação', matricula: 531232 },
     { nome: 'Elias Farias', curso: 'Ciência da Computação', matricula: 531233 },
   // ... outros alunos
   ];
