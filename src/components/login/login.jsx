@@ -3,9 +3,11 @@ import { Box, TextField, Button, Select, MenuItem, InputLabel, FormControl, Inpu
 import './styles.css';
 import LogoUFC from '../../assets/LogoUFC.png';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { useNavigate } from 'react-router';
 
 function Login() {
 
+  const navigate = useNavigate();
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -35,7 +37,13 @@ function Login() {
       });
       const data = await response.json();
       if (response.ok){
-        console.log('Login realizado com sucesso', data);
+        if (data.user.tipo_usuario === 'alu') {
+          //quero armazenar o nome de usuário do aluno no localStorage
+          localStorage.setItem('alunoNome', data.user.nome_usuario);
+          navigate('/aluno');
+        } else if (data.user.tipo_usuario === 'prof') {
+          navigate('/professor');
+        }
       } else {
         console.error('Erro ao realizar login', data.error);
       }

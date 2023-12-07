@@ -17,13 +17,16 @@ const rows = [
 ];
 
 function TelaAluno() {
+
+  const alunoNome = localStorage.getItem('alunoNome');
+
   return(
     <div>
       <Header />
       <div style={{padding: '8px 50px 0px' }}>
         <div>
           <h2>Boas Vindas</h2>
-          <h1>Aluno(a): José Elias</h1>
+          <h1>Aluno(a): {alunoNome}</h1>
         </div>
         <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
