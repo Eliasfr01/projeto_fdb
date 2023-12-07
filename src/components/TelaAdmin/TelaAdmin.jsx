@@ -1,4 +1,5 @@
 import React from 'react';
+import Header from '../header/index.jsx';
 import { Paper, Table, TableBody, TableContainer, TableHead, TableRow, Button, IconButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
@@ -47,6 +48,8 @@ function AdminTurmas() {
   };
 
   return (
+    <div>
+    <Header/>
     <div style={{ padding: 16 }}>
       <Button
         startIcon={<AddCircleOutlineIcon />}
@@ -62,14 +65,7 @@ function AdminTurmas() {
             onClose={handleCloseAddTurma}
             onAddTurma={handleAddTurma}
         />
-      <Button
-        variant="contained"
-        color="primary"
-        style={{ marginLeft: '8px' }}
-      >
-        Voltar
-      </Button>
-
+      
       <TableContainer component={Paper} style={{ marginTop: 16 }}>
         <Table>
           <TableHead>
@@ -105,6 +101,7 @@ function AdminTurmas() {
           </TableBody>
         </Table>
       </TableContainer>
+      </div>
     </div>
   );
 }
