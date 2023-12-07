@@ -1,92 +1,80 @@
-// AdicionarTurma.jsx
 import React, { useState } from 'react';
-import { TextField, Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import { Dialog, DialogContent, DialogTitle, TextField, Button } from '@mui/material';
 
-function AdicionarTurma({ open, handleClose }) {
-  const [formData, setFormData] = useState({
+function AdicionarTurma({ open, onClose, onAddTurma }) {
+  const [turma, setTurma] = useState({
     codigo: '',
     nome: '',
     professor: '',
-    max_discente: '',
-    creditos: '',
+    maxDiscente: '',
+    creditos: ''
   });
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setTurma({ ...turma, [name]: value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Form Data:', formData);
-    // Aqui você pode adicionar a lógica para enviar os dados para a API ou estado global
-    handleClose(); // Fechar o modal após o envio
+  const handleSubmit = () => {
+    onAddTurma(turma);
+    onClose(); // Fechar o modal após o envio
   };
 
   return (
-    <Dialog open={open} onClose={handleClose}>
+    <Dialog open={open} onClose={onClose}>
       <DialogTitle>Adicionar Nova Turma</DialogTitle>
       <DialogContent>
-        <form onSubmit={handleSubmit}>
-          <TextField
-            autoFocus
-            margin="dense"
-            name="codigo"
-            label="Código"
-            type="text"
-            fullWidth
-            variant="outlined"
-            value={formData.codigo}
-            onChange={handleChange}
-          />
-          <TextField
-            margin="dense"
-            name="nome"
-            label="Nome da Turma"
-            type="text"
-            fullWidth
-            variant="outlined"
-            value={formData.nome}
-            onChange={handleChange}
-          />
-          <TextField
-            margin="dense"
-            name="professor"
-            label="Professor"
-            type="text"
-            fullWidth
-            variant="outlined"
-            value={formData.professor}
-            onChange={handleChange}
-          />
-          <TextField
-            margin="dense"
-            name="max_discente"
-            label="Máximo de Discentes"
-            type="number"
-            fullWidth
-            variant="outlined"
-            value={formData.max_discente}
-            onChange={handleChange}
-          />
-          <TextField
-            margin="dense"
-            name="creditos"
-            label="Créditos"
-            type="number"
-            fullWidth
-            variant="outlined"
-            value={formData.creditos}
-            onChange={handleChange}
-          />
-          <DialogActions>
-            <Button onClick={handleClose} color="primary">
-              Cancelar
-            </Button>
-            <Button type="submit" color="primary">
-              Adicionar
-            </Button>
-          </DialogActions>
-        </form>
+        <TextField
+          margin="dense"
+          name="codigo"
+          label="Código"
+          type="text"
+          fullWidth
+          value={turma.codigo}
+          onChange={handleChange}
+        />
+        <TextField
+          margin="dense"
+          name="nome"
+          label="Nome da Turma"
+          type="text"
+          fullWidth
+          value={turma.nome}
+          onChange={handleChange}
+        />
+        <TextField
+          margin="dense"
+          name="professor"
+          label="Professor"
+          type="text"
+          fullWidth
+          value={turma.professor}
+          onChange={handleChange}
+        />
+        <TextField
+          margin="dense"
+          name="maxDiscente"
+          label="Máximo de Discentes"
+          type="number"
+          fullWidth
+          value={turma.maxDiscente}
+          onChange={handleChange}
+        />
+        <TextField
+          margin="dense"
+          name="creditos"
+          label="Créditos"
+          type="number"
+          fullWidth
+          value={turma.creditos}
+          onChange={handleChange}
+        />
+        <Button onClick={onClose} color="primary">
+          Cancelar
+        </Button>
+        <Button onClick={handleSubmit} color="primary">
+          Adicionar
+        </Button>
       </DialogContent>
     </Dialog>
   );
