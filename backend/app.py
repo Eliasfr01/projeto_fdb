@@ -5,7 +5,8 @@ import psycopg2.extras
 
 # Inicialize a aplicação Flask
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
+
 
 # Função para criar conexões com o banco de dados
 def get_db_connection():
@@ -81,6 +82,24 @@ def add_turma():
         conn.rollback()
         print(f"An error occurred: {e}")
         return jsonify({'error': 'Falha ao adicionar turma'}), 500
+    finally:
+        cursor.close()
+        conn.close()
+
+@app.route('/turmas/<int:id_cadeira>', methods=['DELETE'])
+def delete_turma(id_cadeira):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute("DELETE FROM cadeira WHERE id_cadeira = %s", (id_cadeira,))
+        conn.commit()
+        if cursor.rowcount == 0:
+            return jsonify({'error': 'Turma não encontrada'}), 404
+        return jsonify({'message': 'Turma excluída com sucesso!'}), 200
+    except Exception as e:
+        conn.rollback()
+        print(f"An error occurred: {e}")
+        return jsonify({'error': 'Falha ao excluir turma'}), 500
     finally:
         cursor.close()
         conn.close()

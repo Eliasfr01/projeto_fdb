@@ -54,9 +54,24 @@ function AdminTurmas() {
     // Implemente a lógica de edição aqui
   };
 
-  const handleDelete = (turmaId) => {
-    console.log('Remover turma', turmaId);
-    // Implemente a lógica de remoção aqui
+  const handleDelete = async (id_cadeira) => {
+    if(window.confirm('Tem certeza que deseja excluir a turma?')){
+      try {
+        const response = await fetch(`http://localhost:5000/turmas/${id_cadeira}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+        if (response.ok) {
+          setTurmas(turmas.filter((turma) => turma.id_cadeira !== id_cadeira));
+        } else {
+          console.error('Falha ao excluir turma.');
+        }
+      } catch (error) {
+        console.error('Erro ao conectar com o servidor:', error);
+      }
+    }
   };
 
   const handleAddTurma = (newTurma) => {
@@ -164,7 +179,7 @@ function AdminTurmas() {
                   <IconButton onClick={() => handleEdit(turma.id)} color="primary">
                     <EditIcon />
                   </IconButton>
-                  <IconButton onClick={() => handleDelete(turma.id)} color="secondary">
+                  <IconButton onClick={() => handleDelete(turma.id_cadeira)} color="secondary">
                     <DeleteIcon />
                   </IconButton>
                 </StyledTableCell>
