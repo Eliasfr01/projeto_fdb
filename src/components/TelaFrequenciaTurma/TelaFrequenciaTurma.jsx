@@ -23,7 +23,7 @@ function TelaFrequencia() {
           Fundamento de Banco de Dados
         </Typography>
         <Typography variant="subtitle1" component="h3">
-          Discente: Livia Almada
+          Discente: Livia Almada 
         </Typography>
         <Paper elevation={3} style={{padding: '15px', marginTop: '20px'}}>
 

@@ -28,7 +28,7 @@ function MinhasNotas() {
         <Typography variant="h5" component="h2" style={{marginBottom: '20px', fontFamily: 'Rubik'}}>
           Fundamento de Banco de Dados
         </Typography>
-        <Typography variant="h4" component="h1" style={{fontFamily: 'Rubik', marginTop: '-2%'}}>
+        <Typography variant="h4" component="h1" style={{fontFamily: 'Rubik', marginTop: '-25px'}}>
           Discente: Elias
         </Typography>
         <TableContainer component={Paper}>
