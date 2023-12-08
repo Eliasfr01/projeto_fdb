@@ -5,7 +5,7 @@ import { styled } from '@mui/material/styles';
 import Calendar from 'react-calendar';
 import { useParams } from 'react-router-dom';
 import { Link as RouterLink } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import './Style.css';
 
 function TelaFrequencia() {
