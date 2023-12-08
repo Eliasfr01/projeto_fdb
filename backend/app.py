@@ -66,18 +66,24 @@ def get_cadeiras():
     
 @app.route('/turmas', methods=['POST'])
 def add_turma():
-    # ...
+    turma_data = request.json
+    conn = get_db_connection()
+    cursor = conn.cursor()
     try:
-        # ...
         cursor.execute("""
-            INSERT INTO cadeira (nome_cadeira, semestre_pertence, max_discentes, creditos, id_professor)
-            VALUES (%s, %s, %s, %s, %s)
-        """, (turma_data['nome'], turma_data['semestre_pertence'], turma_data['max_discentes'],
-              turma_data['creditos'], turma_data['professorId']))
-        # ...
+            INSERT INTO cadeira (id_cadeira, nome_cadeira, semestre_pertence, max_discentes, creditos, id_professor)
+            VALUES (%s, %s, %s, %s, %s, %s)
+        """, (turma_data['codigo'],turma_data['nome'], turma_data['semestre_pertence'], turma_data['max_discentes'],
+              turma_data['creditos'], turma_data['id_professor']))
+        conn.commit()
+        return jsonify({'message': 'Turma adicionada com sucesso!'}), 201
     except Exception as e:
+        conn.rollback()
         print(f"An error occurred: {e}")
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'error': 'Falha ao adicionar turma'}), 500
+    finally:
+        cursor.close()
+        conn.close()
     
 @app.route('/professores', methods=['GET'])
 def get_professores():

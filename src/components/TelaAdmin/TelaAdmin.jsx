@@ -144,10 +144,10 @@ function AdminTurmas() {
             <StyledTableRow>
               <StyledTableCell>Código</StyledTableCell>
               <StyledTableCell>Nome</StyledTableCell>
-              <StyledTableCell>Professor</StyledTableCell>
               <StyledTableCell>Semestre</StyledTableCell>   
               <StyledTableCell>Máximo de discentes</StyledTableCell>
               <StyledTableCell>Créditos</StyledTableCell>
+              <StyledTableCell>Professor</StyledTableCell>
               <StyledTableCell align="center">Ações</StyledTableCell>
             </StyledTableRow>
           </TableHead>
@@ -156,10 +156,10 @@ function AdminTurmas() {
               <StyledTableRow key={turma.id}>
                 <StyledTableCell>{turma.id_cadeira}</StyledTableCell>
                 <StyledTableCell>{turma.nome_cadeira}</StyledTableCell>
-                <StyledTableCell>{turma.nome_professor}</StyledTableCell>
                 <StyledTableCell>{turma.semestre_pertence}</StyledTableCell>
                 <StyledTableCell>{turma.max_discentes}</StyledTableCell>
                 <StyledTableCell>{turma.creditos}</StyledTableCell>
+                <StyledTableCell>{turma.id_professor}</StyledTableCell>
                 <StyledTableCell align="center">
                   <IconButton onClick={() => handleEdit(turma.id)} color="primary">
                     <EditIcon />

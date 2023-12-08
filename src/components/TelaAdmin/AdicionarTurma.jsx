@@ -3,11 +3,12 @@ import { Dialog, DialogContent, DialogTitle, TextField, Button, FormControl, Inp
 
 function AdicionarTurma({ open, onClose, onAddTurma }) {
   const [turma, setTurma] = useState({
+    codigo: '',
     nome: '',
-    professorId: '',
     semestre_pertence: '',
-    maxDiscente: '',
-    creditos: ''
+    max_discente: '',
+    creditos: '',
+    id_professor: ''
   });
 
   const [professores, setProfessores] = useState([]);
@@ -38,11 +39,12 @@ function AdicionarTurma({ open, onClose, onAddTurma }) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          codigo: turma.codigo,
           nome: turma.nome,
-          id_professor: turma.professorId,
           semestre_pertence: turma.semestre_pertence,
-          max_discentes: turma.maxDiscente,
+          max_discentes: turma.max_discente,
           creditos: turma.creditos,
+          id_professor: turma.id_professor,
         }),
       });
   
@@ -50,13 +52,13 @@ function AdicionarTurma({ open, onClose, onAddTurma }) {
       if (response.ok) {
         // Se for bem sucedida, fecha o modal e opcionalmente limpa o formulário ou atualiza a lista de turmas
         setTurma({ // Limpa o formulário
+          codigo: '',
           nome: '',
-          professorId: '',
           semestre_pertence: '',
           maxDiscente: '',
-          creditos: ''
+          creditos: '',
+          professorId: ''
         });
-        console.log("Deu certo");
         onClose();
       } else {
         // Se houver um erro na resposta do servidor, mostra um alerta ou trata o erro
@@ -78,6 +80,15 @@ function AdicionarTurma({ open, onClose, onAddTurma }) {
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Adicionar Nova Turma</DialogTitle>
       <DialogContent>
+      <TextField
+          margin="dense"
+          name="codigo"
+          label="Codigo da Cadeira"
+          type="text"
+          fullWidth
+          value={turma.codigo}
+          onChange={handleChange}
+        />
         <TextField
           margin="dense"
           name="nome"
@@ -87,22 +98,6 @@ function AdicionarTurma({ open, onClose, onAddTurma }) {
           value={turma.nome}
           onChange={handleChange}
         />
-        <FormControl margin="normal" fullWidth>
-          <InputLabel id="user-type-label">Selecione um professor</InputLabel>
-          <Select
-            labelId="professorLabel"
-            id="professorSelect"
-            name="professorId"
-            value={turma.professorId}
-            onChange={handleChange}
-          >
-            {professores.map((professor) => (
-              <MenuItem key={professor.id_professor} value={professor.id_professor}>
-                {professor.nome}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
         <TextField 
           margin="dense"
           name="semestre_pertence"
@@ -114,11 +109,11 @@ function AdicionarTurma({ open, onClose, onAddTurma }) {
         />
         <TextField
           margin="dense"
-          name="maxDiscente"
+          name="max_discente"
           label="Máximo de Discentes"
           type="number"
           fullWidth
-          value={turma.maxDiscente}
+          value={turma.max_discente}
           onChange={handleChange}
         />
         <TextField
@@ -130,6 +125,22 @@ function AdicionarTurma({ open, onClose, onAddTurma }) {
           value={turma.creditos}
           onChange={handleChange}
         />
+        <FormControl margin="normal" fullWidth>
+          <InputLabel id="user-type-label">Selecione um professor</InputLabel>
+          <Select
+            labelId="professorLabel"
+            id="professorSelect"
+            name="id_professor"
+            value={turma.id_professor}
+            onChange={handleChange}
+        >
+            {professores.map((professor) => (
+              <MenuItem key={professor.id_professor} value={professor.id_professor}>
+                {professor.nome}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
         <Button onClick={onClose} color="primary">
           Cancelar
         </Button>
