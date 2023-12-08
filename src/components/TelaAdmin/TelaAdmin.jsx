@@ -20,11 +20,6 @@ function AdminTurmas() {
   const [isAddAlunoOpen, setIsAddAlunoOpen] = useState(false);
   const [isAddProfessorOpen, setIsAddProfessorOpen] = useState(false);
 
-  const handleAdd = () => {
-    console.log('Adicionar turma');
-    // Implemente a lógica de adicionar turma aqui
-  };
-
   const handleOpenAddTurma = () => {
     setIsAddTurmaOpen(true);
   };
@@ -174,7 +169,7 @@ function AdminTurmas() {
                 <StyledTableCell>{turma.semestre_pertence}</StyledTableCell>
                 <StyledTableCell>{turma.max_discentes}</StyledTableCell>
                 <StyledTableCell>{turma.creditos}</StyledTableCell>
-                <StyledTableCell>{turma.id_professor}</StyledTableCell>
+                <StyledTableCell>{turma.nome_professor}</StyledTableCell>
                 <StyledTableCell align="center">
                   <IconButton onClick={() => handleEdit(turma.id)} color="primary">
                     <EditIcon />
