@@ -86,6 +86,45 @@ def add_turma():
         cursor.close()
         conn.close()
 
+@app.route('/turmas/<int:id_cadeira>', methods=['PUT'])
+def update_turma(id_cadeira):
+    turma_data = request.get_json()
+
+    # Verifique se todos os campos necessários estão presentes
+    required_fields = ['nome_cadeira', 'semestre_pertence', 'max_discentes', 'creditos', 'id_professor']
+    if not all(key in turma_data for key in required_fields):
+        return jsonify({'error': 'Dados incompletos'}), 400
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        # Atualizar a turma com os novos dados recebidos do cliente
+        cursor.execute("""
+            UPDATE cadeira
+            SET nome_cadeira = %s, semestre_pertence = %s, max_discentes = %s, creditos = %s, id_professor = %s
+            WHERE id_cadeira = %s
+        """, (
+            turma_data['nome_cadeira'],
+            turma_data['semestre_pertence'],
+            turma_data['max_discentes'],
+            turma_data['creditos'],
+            turma_data['id_professor'],
+            id_cadeira
+        ))
+
+        conn.commit()
+        if cursor.rowcount == 0:
+            return jsonify({'error': 'Turma não encontrada'}), 404
+
+        return jsonify({'message': 'Turma atualizada com sucesso'}), 200
+    except Exception as e:
+        conn.rollback()
+        return jsonify({'error': str(e)}), 500
+    finally:
+        cursor.close()
+        conn.close()
+
+
 @app.route('/turmas/<int:id_cadeira>', methods=['DELETE'])
 def delete_turma(id_cadeira):
     conn = get_db_connection()

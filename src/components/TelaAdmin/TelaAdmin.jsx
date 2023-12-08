@@ -10,6 +10,7 @@ import { useState } from 'react';
 import AdicionarTurma from './AdicionarTurma.jsx';
 import AdicionarAlunos from './AdicionarAluno.jsx';
 import AdicionarProfessor from './AdicionarProfessor.jsx';
+import EditarTurma from './EditarTurma.jsx';
 // Dados simulados das turmas
 
 function AdminTurmas() {
@@ -19,6 +20,9 @@ function AdminTurmas() {
 
   const [isAddAlunoOpen, setIsAddAlunoOpen] = useState(false);
   const [isAddProfessorOpen, setIsAddProfessorOpen] = useState(false);
+
+  const [isEditTurmaOpen, setIsEditTurmaOpen] = useState(false);
+  const [currentTurma, setCurrentTurma] = useState(null);
 
   const handleOpenAddTurma = () => {
     setIsAddTurmaOpen(true);
@@ -44,9 +48,24 @@ function AdminTurmas() {
     setIsAddProfessorOpen(false);
   };
 
-  const handleEdit = (turmaId) => {
+  const handleEditTurma = (turmaId) => {
     console.log('Editar turma', turmaId);
     // Implemente a lógica de edição aqui
+  };
+
+  const handleOpenEditTurma = (turma) => {
+    setCurrentTurma(turma); // Define a turma atual para a turma que será editada
+    setIsEditTurmaOpen(true); // Abre o modal de edição
+  };
+
+  const handleCloseEditTurma = () => {
+    setIsEditTurmaOpen(false);
+  }
+
+  const handleUpdateTurma = (updatedTurma) => {
+    // Atualiza a lista de turmas com os novos dados da turma editada
+    setTurmas(turmas.map((turma) => (turma.id_cadeira === updatedTurma.id_cadeira ? updatedTurma : turma)));
+    handleCloseEditTurma();
   };
 
   const handleDelete = async (id_cadeira) => {
@@ -163,7 +182,7 @@ function AdminTurmas() {
           </TableHead>
           <TableBody>
             {turmas.map((turma) => (
-              <StyledTableRow key={turma.id}>
+              <StyledTableRow key={turma.id_cadeira}>
                 <StyledTableCell>{turma.id_cadeira}</StyledTableCell>
                 <StyledTableCell>{turma.nome_cadeira}</StyledTableCell>
                 <StyledTableCell>{turma.semestre_pertence}</StyledTableCell>
@@ -171,7 +190,7 @@ function AdminTurmas() {
                 <StyledTableCell>{turma.creditos}</StyledTableCell>
                 <StyledTableCell>{turma.nome_professor}</StyledTableCell>
                 <StyledTableCell align="center">
-                  <IconButton onClick={() => handleEdit(turma.id)} color="primary">
+                  <IconButton onClick={() => handleOpenEditTurma(turma)} color="primary">
                     <EditIcon />
                   </IconButton>
                   <IconButton onClick={() => handleDelete(turma.id_cadeira)} color="secondary">
@@ -184,6 +203,14 @@ function AdminTurmas() {
         </Table>
       </TableContainer>
       </div>
+      {currentTurma && (
+        <EditarTurma
+          open={isEditTurmaOpen}
+          onClose={handleCloseEditTurma}
+          onUpdateTurma={handleUpdateTurma}
+          turmaAtual={currentTurma} // Passa a turma atual para o componente de edição
+        />
+      )}
     </div>
   );
 }
