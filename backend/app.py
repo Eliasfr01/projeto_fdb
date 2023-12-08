@@ -5,7 +5,8 @@ import psycopg2.extras
 
 # Inicialize a aplicação Flask
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
+
 
 # Função para criar conexões com o banco de dados
 def get_db_connection():
@@ -66,18 +67,81 @@ def get_cadeiras():
     
 @app.route('/turmas', methods=['POST'])
 def add_turma():
-    # ...
+    turma_data = request.json
+    conn = get_db_connection()
+    cursor = conn.cursor()
     try:
-        # ...
         cursor.execute("""
-            INSERT INTO cadeira (nome_cadeira, semestre_pertence, max_discentes, creditos, id_professor)
-            VALUES (%s, %s, %s, %s, %s)
-        """, (turma_data['nome'], turma_data['semestre_pertence'], turma_data['max_discentes'],
-              turma_data['creditos'], turma_data['professorId']))
-        # ...
+            INSERT INTO cadeira (id_cadeira, nome_cadeira, semestre_pertence, max_discentes, creditos, id_professor)
+            VALUES (%s, %s, %s, %s, %s, %s)
+        """, (turma_data['codigo'],turma_data['nome'], turma_data['semestre_pertence'], turma_data['max_discentes'],
+              turma_data['creditos'], turma_data['id_professor']))
+        conn.commit()
+        return jsonify({'message': 'Turma adicionada com sucesso!'}), 201
     except Exception as e:
+        conn.rollback()
         print(f"An error occurred: {e}")
+        return jsonify({'error': 'Falha ao adicionar turma'}), 500
+    finally:
+        cursor.close()
+        conn.close()
+
+@app.route('/turmas/<int:id_cadeira>', methods=['PUT'])
+def update_turma(id_cadeira):
+    turma_data = request.get_json()
+
+    # Verifique se todos os campos necessários estão presentes
+    required_fields = ['nome_cadeira', 'semestre_pertence', 'max_discentes', 'creditos', 'id_professor']
+    if not all(key in turma_data for key in required_fields):
+        return jsonify({'error': 'Dados incompletos'}), 400
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        # Atualizar a turma com os novos dados recebidos do cliente
+        cursor.execute("""
+            UPDATE cadeira
+            SET nome_cadeira = %s, semestre_pertence = %s, max_discentes = %s, creditos = %s, id_professor = %s
+            WHERE id_cadeira = %s
+        """, (
+            turma_data['nome_cadeira'],
+            turma_data['semestre_pertence'],
+            turma_data['max_discentes'],
+            turma_data['creditos'],
+            turma_data['id_professor'],
+            id_cadeira
+        ))
+
+        conn.commit()
+        if cursor.rowcount == 0:
+            return jsonify({'error': 'Turma não encontrada'}), 404
+
+        return jsonify({'message': 'Turma atualizada com sucesso'}), 200
+    except Exception as e:
+        conn.rollback()
         return jsonify({'error': str(e)}), 500
+    finally:
+        cursor.close()
+        conn.close()
+
+
+@app.route('/turmas/<int:id_cadeira>', methods=['DELETE'])
+def delete_turma(id_cadeira):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute("DELETE FROM cadeira WHERE id_cadeira = %s", (id_cadeira,))
+        conn.commit()
+        if cursor.rowcount == 0:
+            return jsonify({'error': 'Turma não encontrada'}), 404
+        return jsonify({'message': 'Turma excluída com sucesso!'}), 200
+    except Exception as e:
+        conn.rollback()
+        print(f"An error occurred: {e}")
+        return jsonify({'error': 'Falha ao excluir turma'}), 500
+    finally:
+        cursor.close()
+        conn.close()
     
 @app.route('/professores', methods=['GET'])
 def get_professores():
@@ -87,6 +151,22 @@ def get_professores():
         cursor.execute("SELECT id_professor, nome FROM professor")
         professores = cursor.fetchall()
         return jsonify([dict(professor) for professor in professores])
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return jsonify({"error": "An internal error occurred"}), 500
+    finally:
+        cursor.close()
+        conn.close()
+
+@app.route('/alunos', methods=['GET'])
+def get_alunos():
+    conn = get_db_connection()
+    cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    try:
+        cursor.execute("SELECT matricula, nome, sobrenome FROM aluno")
+        alunos_db = cursor.fetchall()
+        alunos = [{'nome': f"{aluno['nome']} {aluno['sobrenome']}", 'matricula': aluno['matricula']} for aluno in alunos_db]
+        return jsonify(alunos)
     except Exception as e:
         print(f"An error occurred: {e}")
         return jsonify({"error": "An internal error occurred"}), 500

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Dialog, DialogContent, DialogTitle, TextField, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
-function AdicionarTurma({ open, onClose, onAddTurma }) {
+function EditarTurma({ open, onClose, onUpdateTurma, turmaAtual }) {
   const [turma, setTurma] = useState({
-    codigo: '',
+    id_cadeira: '',
     nome: '',
     semestre_pertence: '',
     max_discente: '',
@@ -14,13 +14,13 @@ function AdicionarTurma({ open, onClose, onAddTurma }) {
   const [professores, setProfessores] = useState([]);
 
   useEffect(() => {
-    // Carrega os professores do banco de dados
+    // Carrega os professores do banco de dados e atualiza o estado com a turma atual para edição
     const fetchProfessores = async () => {
       try {
-        const response = await fetch('http://localhost:5000/professores'); // Substitua pela URL correta
+        const response = await fetch('http://localhost:5000/professores');
         if (response.ok) {
           const data = await response.json();
-          setProfessores(data); // Atualiza o estado com os dados dos professores
+          setProfessores(data);
         }
       } catch (error) {
         console.error('Erro ao buscar professores:', error);
@@ -28,44 +28,29 @@ function AdicionarTurma({ open, onClose, onAddTurma }) {
     };
 
     fetchProfessores();
-  }, []);
+    if (turmaAtual) {
+      setTurma(turmaAtual);
+    }
+  }, [turmaAtual]);
 
   const handleSubmit = async () => {
     try {
-      // Realiza a requisição POST para o servidor
-      const response = await fetch('http://localhost:5000/turmas', {
-        method: 'POST',
+      const response = await fetch(`http://localhost:5000/turmas/${turma.id_cadeira}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          codigo: turma.codigo,
-          nome: turma.nome,
-          semestre_pertence: turma.semestre_pertence,
-          max_discentes: turma.max_discente,
-          creditos: turma.creditos,
-          id_professor: turma.id_professor,
-        }),
+        body: JSON.stringify(turma),
       });
-  
-      // Verifica se a requisição foi bem sucedida
+
       if (response.ok) {
-        // Se for bem sucedida, fecha o modal e opcionalmente limpa o formulário ou atualiza a lista de turmas
-        setTurma({ // Limpa o formulário
-          codigo: '',
-          nome: '',
-          semestre_pertence: '',
-          maxDiscente: '',
-          creditos: '',
-          professorId: ''
-        });
+        alert('Turma atualizada com sucesso.');
+        onUpdateTurma(turma); // Atualiza a lista de turmas na interface do usuário
         onClose();
       } else {
-        // Se houver um erro na resposta do servidor, mostra um alerta ou trata o erro
-        alert('Falha ao adicionar turma. Por favor, tente novamente.');
+        alert('Falha ao atualizar turma. Por favor, tente novamente.');
       }
     } catch (error) {
-      // Se houver um erro ao enviar a requisição, mostra um alerta ou trata o erro
       console.error('Erro ao enviar dados para o servidor:', error);
       alert('Erro ao conectar ao servidor. Por favor, verifique sua conexão e tente novamente.');
     }
@@ -78,24 +63,15 @@ function AdicionarTurma({ open, onClose, onAddTurma }) {
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Adicionar Nova Turma</DialogTitle>
+      <DialogTitle>Editar Turma</DialogTitle>
       <DialogContent>
-      <TextField
-          margin="dense"
-          name="codigo"
-          label="Codigo da Cadeira"
-          type="text"
-          fullWidth
-          value={turma.codigo}
-          onChange={handleChange}
-        />
         <TextField
           margin="dense"
-          name="nome"
+          name="nome_cadeira"
           label="Nome da Cadeira"
           type="text"
           fullWidth
-          value={turma.nome}
+          value={turma.nome_cadeira}
           onChange={handleChange}
         />
         <TextField 
@@ -109,11 +85,11 @@ function AdicionarTurma({ open, onClose, onAddTurma }) {
         />
         <TextField
           margin="dense"
-          name="max_discente"
+          name="max_discentes"
           label="Máximo de Discentes"
           type="number"
           fullWidth
-          value={turma.max_discente}
+          value={turma.max_discentes}
           onChange={handleChange}
         />
         <TextField
@@ -126,14 +102,14 @@ function AdicionarTurma({ open, onClose, onAddTurma }) {
           onChange={handleChange}
         />
         <FormControl margin="normal" fullWidth>
-          <InputLabel id="user-type-label">Selecione um professor</InputLabel>
+          <InputLabel id="professorLabel">Selecione um professor</InputLabel>
           <Select
             labelId="professorLabel"
             id="professorSelect"
             name="id_professor"
             value={turma.id_professor}
             onChange={handleChange}
-        >
+          >
             {professores.map((professor) => (
               <MenuItem key={professor.id_professor} value={professor.id_professor}>
                 {professor.nome}
@@ -145,11 +121,11 @@ function AdicionarTurma({ open, onClose, onAddTurma }) {
           Cancelar
         </Button>
         <Button onClick={handleSubmit} color="primary">
-          Adicionar
+          Atualizar
         </Button>
       </DialogContent>
     </Dialog>
   );
 }
 
-export default AdicionarTurma;
+export default EditarTurma;

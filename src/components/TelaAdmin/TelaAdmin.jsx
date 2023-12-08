@@ -10,6 +10,7 @@ import { useState } from 'react';
 import AdicionarTurma from './AdicionarTurma.jsx';
 import AdicionarAlunos from './AdicionarAluno.jsx';
 import AdicionarProfessor from './AdicionarProfessor.jsx';
+import EditarTurma from './EditarTurma.jsx';
 // Dados simulados das turmas
 
 function AdminTurmas() {
@@ -20,10 +21,8 @@ function AdminTurmas() {
   const [isAddAlunoOpen, setIsAddAlunoOpen] = useState(false);
   const [isAddProfessorOpen, setIsAddProfessorOpen] = useState(false);
 
-  const handleAdd = () => {
-    console.log('Adicionar turma');
-    // Implemente a lógica de adicionar turma aqui
-  };
+  const [isEditTurmaOpen, setIsEditTurmaOpen] = useState(false);
+  const [currentTurma, setCurrentTurma] = useState(null);
 
   const handleOpenAddTurma = () => {
     setIsAddTurmaOpen(true);
@@ -49,14 +48,44 @@ function AdminTurmas() {
     setIsAddProfessorOpen(false);
   };
 
-  const handleEdit = (turmaId) => {
+  const handleEditTurma = (turmaId) => {
     console.log('Editar turma', turmaId);
     // Implemente a lógica de edição aqui
   };
 
-  const handleDelete = (turmaId) => {
-    console.log('Remover turma', turmaId);
-    // Implemente a lógica de remoção aqui
+  const handleOpenEditTurma = (turma) => {
+    setCurrentTurma(turma); // Define a turma atual para a turma que será editada
+    setIsEditTurmaOpen(true); // Abre o modal de edição
+  };
+
+  const handleCloseEditTurma = () => {
+    setIsEditTurmaOpen(false);
+  }
+
+  const handleUpdateTurma = (updatedTurma) => {
+    // Atualiza a lista de turmas com os novos dados da turma editada
+    setTurmas(turmas.map((turma) => (turma.id_cadeira === updatedTurma.id_cadeira ? updatedTurma : turma)));
+    handleCloseEditTurma();
+  };
+
+  const handleDelete = async (id_cadeira) => {
+    if(window.confirm('Tem certeza que deseja excluir a turma?')){
+      try {
+        const response = await fetch(`http://localhost:5000/turmas/${id_cadeira}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+        if (response.ok) {
+          setTurmas(turmas.filter((turma) => turma.id_cadeira !== id_cadeira));
+        } else {
+          console.error('Falha ao excluir turma.');
+        }
+      } catch (error) {
+        console.error('Erro ao conectar com o servidor:', error);
+      }
+    }
   };
 
   const handleAddTurma = (newTurma) => {
@@ -144,27 +173,27 @@ function AdminTurmas() {
             <StyledTableRow>
               <StyledTableCell>Código</StyledTableCell>
               <StyledTableCell>Nome</StyledTableCell>
-              <StyledTableCell>Professor</StyledTableCell>
               <StyledTableCell>Semestre</StyledTableCell>   
               <StyledTableCell>Máximo de discentes</StyledTableCell>
               <StyledTableCell>Créditos</StyledTableCell>
+              <StyledTableCell>Professor</StyledTableCell>
               <StyledTableCell align="center">Ações</StyledTableCell>
             </StyledTableRow>
           </TableHead>
           <TableBody>
             {turmas.map((turma) => (
-              <StyledTableRow key={turma.id}>
+              <StyledTableRow key={turma.id_cadeira}>
                 <StyledTableCell>{turma.id_cadeira}</StyledTableCell>
                 <StyledTableCell>{turma.nome_cadeira}</StyledTableCell>
-                <StyledTableCell>{turma.nome_professor}</StyledTableCell>
                 <StyledTableCell>{turma.semestre_pertence}</StyledTableCell>
                 <StyledTableCell>{turma.max_discentes}</StyledTableCell>
                 <StyledTableCell>{turma.creditos}</StyledTableCell>
+                <StyledTableCell>{turma.nome_professor}</StyledTableCell>
                 <StyledTableCell align="center">
-                  <IconButton onClick={() => handleEdit(turma.id)} color="primary">
+                  <IconButton onClick={() => handleOpenEditTurma(turma)} color="primary">
                     <EditIcon />
                   </IconButton>
-                  <IconButton onClick={() => handleDelete(turma.id)} color="secondary">
+                  <IconButton onClick={() => handleDelete(turma.id_cadeira)} color="secondary">
                     <DeleteIcon />
                   </IconButton>
                 </StyledTableCell>
@@ -174,6 +203,14 @@ function AdminTurmas() {
         </Table>
       </TableContainer>
       </div>
+      {currentTurma && (
+        <EditarTurma
+          open={isEditTurmaOpen}
+          onClose={handleCloseEditTurma}
+          onUpdateTurma={handleUpdateTurma}
+          turmaAtual={currentTurma} // Passa a turma atual para o componente de edição
+        />
+      )}
     </div>
   );
 }

@@ -1,19 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Table, TableBody, TableContainer, TableHead, TableRow, IconButton, Button } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import { styled } from '@mui/material/styles';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 
 function AdicionarAlunos({ open, onClose }) {
+
   const [showDelete, setShowDelete] = useState({});
-  // Dados simulados dos alunos
-  const alunosData = [
-    { nome: 'Carlos Henrique', curso: 'Ciência da Computação', matricula: 531231 },
-    { nome: 'Pedro Maciel', curso: 'Sistema da Informação', matricula: 531232 },
-    { nome: 'Elias Farias', curso: 'Ciência da Computação', matricula: 531233 },
-  // ... outros alunos
-  ];
+  const [alunos, setAlunos] = useState([]); 
+
+  useEffect(() => {
+    const fetchAlunos = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/alunos');
+        if (response.ok) {
+          const data = await response.json();
+          setAlunos(data);
+        } else {
+          console.error('Erro ao buscar alunos');
+        }
+      } catch (error) {
+        console.error('Erro ao conectar com o servidor', error);
+      }
+    };
+
+    fetchAlunos();
+  }, []);
 
   // Funções para adicionar e remover alunos (a serem implementadas)
   const handleAddAluno = (aluno) => {
@@ -24,15 +37,16 @@ function AdicionarAlunos({ open, onClose }) {
     // ...
   };
 
+  const handleEditAluno = (aluno) => {
+
+  }
+
   const toggleDelete = (matricula) => {
     setShowDelete(prev => ({ ...prev, [matricula]: !prev[matricula] }));
   };
 
   const handleConfirm = () => {
-    // Aqui você pode colocar qualquer lógica que precisa acontecer quando confirma
-    // Por exemplo, enviar os dados para um backend ou atualizar o estado local
 
-    // Chame onClose para fechar o diálogo
     onClose();
   };
 
@@ -45,22 +59,23 @@ function AdicionarAlunos({ open, onClose }) {
             <TableHead>
               <StyledTableRow>
                 <StyledTableCell>Alunos</StyledTableCell>
-                <StyledTableCell>Curso</StyledTableCell>
                 <StyledTableCell>Matrícula</StyledTableCell>
                 <StyledTableCell>Ação</StyledTableCell>
               </StyledTableRow>
             </TableHead>
             <TableBody>
-              {alunosData.map((aluno, index) => (
+              {alunos.map((aluno, index) => (
                 <StyledTableRow key={index}>
                   <StyledTableCell>{aluno.nome}</StyledTableCell>
-                  <StyledTableCell>{aluno.curso}</StyledTableCell>
                   <StyledTableCell>{aluno.matricula}</StyledTableCell>
-                  <StyledTableCell>
-                  <IconButton onClick={() => toggleDelete(aluno.matricula)}>
-                      {showDelete[aluno.matricula] ? <DeleteIcon /> : <AddIcon />}
-                    </IconButton>
-                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                  <IconButton onClick={() => handleEditAluno()} color="primary">
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton onClick={() => toggleDelete()} color="secondary">
+                    <DeleteIcon />
+                  </IconButton>
+                </StyledTableCell>
                 </StyledTableRow>
               ))}
             </TableBody>
