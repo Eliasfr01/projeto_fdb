@@ -158,6 +158,22 @@ def get_professores():
         cursor.close()
         conn.close()
 
+@app.route('/alunos', methods=['GET'])
+def get_alunos():
+    conn = get_db_connection()
+    cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    try:
+        cursor.execute("SELECT matricula, nome, sobrenome FROM aluno")
+        alunos_db = cursor.fetchall()
+        alunos = [{'nome': f"{aluno['nome']} {aluno['sobrenome']}", 'matricula': aluno['matricula']} for aluno in alunos_db]
+        return jsonify(alunos)
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return jsonify({"error": "An internal error occurred"}), 500
+    finally:
+        cursor.close()
+        conn.close()
+
 # Rota de teste para verificar se a aplicação está funcionando
 @app.route('/')
 def index():
